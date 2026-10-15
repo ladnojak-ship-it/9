@@ -6,6 +6,7 @@ repo root as fabric-api.jar.
 """
 import json
 import os
+import urllib.parse
 import urllib.request
 
 MC_VERSION = "26.3"
@@ -22,11 +23,12 @@ def prop(name: str) -> str:
 
 def main() -> None:
     want = prop("fabric_api_version")
-    url = (
-        "https://api.modrinth.com/v2/project/fabric-api/version"
-        f'?game_versions=["{MC_VERSION}"]&loaders=["fabric"]'
+    query = urllib.parse.urlencode(
+        {"game_versions": json.dumps([MC_VERSION]), "loaders": json.dumps(["fabric"])}
     )
-    with urllib.request.urlopen(url) as resp:
+    url = f"https://api.modrinth.com/v2/project/fabric-api/version?{query}"
+    req = urllib.request.Request(url, headers={"User-Agent": "mc-in-gta/ci (build script)"})
+    with urllib.request.urlopen(req) as resp:
         versions = json.load(resp)
     if not versions:
         raise SystemExit(f"Modrinth has no Fabric API for Minecraft {MC_VERSION}")
@@ -35,7 +37,9 @@ def main() -> None:
         print(f"warning: {want} not on Modrinth, using {pick['version_number']}")
     f = pick["files"][0]
     print(f"Fabric API {f['filename']} <- {f['url']}")
-    urllib.request.urlretrieve(f["url"], "fabric-api.jar")
+    req = urllib.request.Request(f["url"], headers={"User-Agent": "mc-in-gta/ci (build script)"})
+    with urllib.request.urlopen(req) as resp, open("fabric-api.jar", "wb") as out:
+        out.write(resp.read())
 
 
 if __name__ == "__main__":
