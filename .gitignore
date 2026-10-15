@@ -1,0 +1,7 @@
+[Bb]uild/
+[Oo]ut/
+[Dd]ist/
+*.log
+*.user
+Thumbs.db
+.DS_Store
