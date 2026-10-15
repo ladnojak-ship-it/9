@@ -46,6 +46,14 @@ Copy-Item (Join-Path $gta 'third_party\ReShade.fxh')    $stageShaders
 Copy-Item (Join-Path $gta 'third_party\ReShadeUI.fxh')  $stageShaders
 Copy-Item $jar, $fabricApi.FullName $stageMcMods
 
+# --- optional mods (installed with -WithSodium; the passthrough works without them)
+$optSrc = Join-Path $root 'optional'
+if (Test-Path $optSrc) {
+    $stageOpt = Join-Path $stage 'MINECRAFT\mods-optional'
+    New-Item -ItemType Directory -Force -Path $stageOpt | Out-Null
+    Get-ChildItem $optSrc -Filter '*.jar' | Copy-Item -Destination $stageOpt
+}
+
 # --- the files install.sh would write: launch args, ReShade preset (ours), ReShade.ini (only if missing)
 [System.IO.File]::WriteAllText((Join-Path $stageGta 'args.txt'), "-nobattleye -noBE`r`n")
 [System.IO.File]::WriteAllText((Join-Path $stage 'README.txt'), (Get-Content (Join-Path $PSScriptRoot '..\README.txt') -Raw))

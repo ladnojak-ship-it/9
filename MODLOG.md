@@ -92,6 +92,12 @@ MC (профиль 67) → GTA → Story Mode вручную → F7. Никог�
 ## Дальше
 - [x] разрешение пользователя на установку в папку игры и mods
 - [x] установка (install.ps1) + запуск обоих + скриншоты (um win)
-- [ ] (опц.) проверить poselag=1 в воздухе, поставить боки/TNT, мобы vs полиция
+- [x] Sodium (FPS Minecraft): `scripts/fetch_mc_mods.py` тянет стабильный
+      sodium-fabric (Modrinth, 26.3), package.ps1 кладёт в MINECRAFT\mods-optional,
+      install.ps1 ставит с флагом -WithSodium и удаляет с ним же при -Remove;
+      документация в README.md/README.txt
+- [ ] пересобрать, установить с -WithSodium, замерить FPS Minecraft (F3) и
+      сравнить смиринг при быстром движении
+- [ ] (опц.) проверить poselag=1 в воздухе
 - [ ] (опц.) showcase-видео (um win record + um video)
 - [ ] field note в kb (с разрешения человека)

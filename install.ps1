@@ -13,13 +13,14 @@
 .EXAMPLE
   install.bat -GtaDir "D:\SteamLibrary\steamapps\common\Grand Theft Auto V" -McDir "C:\Users\me\AppData\Roaming\FreesmLauncher\instances\67\minecraft"
 .EXAMPLE
-  install.bat -Remove          # uninstall the mod (leaves other mods' loaders alone)
+  install.bat -WithSodium    # also installs Sodium (raises Minecraft's FPS -> fewer artifacts)
 #>
 [CmdletBinding()]
 param(
   [string]$GtaDir,
   [string]$McDir,
   [switch]$Force,
+  [switch]$WithSodium,
   [switch]$Remove
 )
 
@@ -127,6 +128,13 @@ if ($Remove) {
   }
   Remove-Item (Join-Path $gta 'reshade-shaders\Shaders') -ErrorAction SilentlyContinue
   Remove-Item (Join-Path $gta 'reshade-shaders') -ErrorAction SilentlyContinue
+  # optional mods this installer copied (Sodium and friends), installed with -WithSodium
+  if (Test-Path (Join-Path $here 'MINECRAFT\mods-optional')) {
+    foreach ($jar in (Get-ChildItem (Join-Path $here 'MINECRAFT\mods-optional') -Filter *.jar)) {
+      $p = Join-Path (Join-Path $mc 'mods') $jar.Name
+      if (Test-Path $p) { Remove-Item -LiteralPath $p -Force; Write-Host "  removed minecraft mod: $($jar.Name)" }
+    }
+  }
   Write-Host "Done." -ForegroundColor Green
   exit 0
 }
@@ -184,6 +192,32 @@ foreach ($jar in (Get-ChildItem (Join-Path $here 'MINECRAFT\mods') -Filter *.jar
   }
   Copy-Item -LiteralPath $jar.FullName -Destination $dst -Force
   Write-Host "  minecraft mod: $($jar.Name)"
+}
+
+# ---------------------------------------------------------------- optional Minecraft mods
+# Sodium raises Minecraft's frame rate: the compositor re-projects each GTA frame from the
+# newest Minecraft frame, so a Minecraft that runs much slower than GTA is what smears blocks
+# when the camera moves fast. The passthrough works without it; install with -WithSodium.
+$optDir = Join-Path $here 'MINECRAFT\mods-optional'
+$optInstalled = @()
+if ($WithSodium -and (Test-Path $optDir)) {
+  foreach ($jar in (Get-ChildItem $optDir -Filter *.jar)) {
+    $dst = Join-Path $mcMods $jar.Name
+    if ((Test-Path $dst) -and ((Get-Hash $dst) -ne (Get-Hash $jar.FullName))) {
+      if (-not $backup) {
+        $backup = Join-Path $gta ("_passthrough_backup_{0:yyyyMMdd_HHmmss}" -f (Get-Date))
+        New-Item -ItemType Directory -Force -Path $backup | Out-Null
+      }
+      Copy-Item -LiteralPath $dst -Destination (Join-Path $backup ("minecraft-mods_" + $jar.Name)) -Force
+    }
+    Copy-Item -LiteralPath $jar.FullName -Destination $dst -Force
+    Write-Host "  minecraft mod (optional): $($jar.Name)"
+    $optInstalled += $jar.Name
+  }
+} elseif (Test-Path $optDir) {
+  Write-Host ""
+  Write-Host "Optional mods available (help when blocks smear during fast motion):" -ForegroundColor Yellow
+  foreach ($jar in (Get-ChildItem $optDir -Filter *.jar)) { Write-Host "    $($jar.Name)   (install.bat -WithSodium)" }
 }
 
 # ---------------------------------------------------------------- summary

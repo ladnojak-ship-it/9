@@ -37,4 +37,12 @@
 
 УДАЛЕНИЕ
   install.bat -Remove   (уберёт только наши файлы; загрузчики других модов
-  вроде OpenIV не тронет; -Force уберёт ещё и ScriptHookV)
+  вроде OpenIV не тронет; -Force уберёт ещё и ScriptHookV; заодно уберёт
+  необязательные моды, которые ставили с -WithSodium)
+
+ЕСЛИ БЛОКИ «ПЛЫВУТ» ПРИ БЫСТРОМ ДВИЖЕНИИ
+  Кадр Minecraft каждый кадр перепроецируется на камеру GTA. Если Minecraft
+  рисует медленнее GTA — блоки смирятся при резком движении. Поставьте Sodium
+  (поднимает FPS Minecraft):
+      install.bat -WithSodium
+  Убрать: install.bat -Remove  или  удалить sodium-fabric-*.jar из mods.

@@ -29,8 +29,8 @@ jobs:
         env:
           GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx3g
 
-      - name: Fetch Fabric API (same MC version, from Modrinth)
-        run: python3 scripts/fetch_fabric_api.py
+      - name: Fetch the Minecraft-side mods (Fabric API, optional Sodium)
+        run: python3 scripts/fetch_mc_mods.py
 
       - uses: actions/upload-artifact@v4
         with:
@@ -39,6 +39,7 @@ jobs:
           path: |
             mc/build/libs/passthrough-*.jar
             fabric-api.jar
+            optional/*.jar
 
   gta:
     name: GTA V plugin (MSVC) + package
