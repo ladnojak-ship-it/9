@@ -57,13 +57,25 @@ GitHub Actions собирает обе стороны:
 MC (профиль 67) → GTA → Story Mode вручную → F7. Никогда не Online;
 не кликать лендинг автоматически, пока человек за клавиатурой.
 
+## Сборка в CI (готово)
+- Пуш в `ladnojak-ship-it/9` (ветка main) → workflow `build`:
+  - job `mc-mod`: ubuntu-latest + Temurin JDK 25 → `passthrough-0.1.0.jar`
+    (Loom/Gradle) + `fabric-api.jar` (Modrinth, 26.3) → артефакт `mc-mod`.
+  - job `gta`: windows-latest → `gta/fetch_deps.sh` (ScriptHookV 3889.0 +
+    ReShade 6.8.0.2155) → `gta/build.bat` (MSVC с образа) → `MCPassthrough.asi`
+    (352 КБ) → `scripts/package.ps1` → `MinecraftInGTA.zip` (7.1 МБ).
+- Прогон 38764815591 — всё зелёное. Артефакт скачан в `out/pkg`.
+- Правки по пути: URL Modrinth (urlencode + User-Agent), корень репы в
+  package.ps1 (лишний Split-Path), поиск jar'а рекурсивно (upload-artifact
+  сохраняет структуру `mc/build/libs/`).
+- Содержимое пакета: GTA\ (asi, ScriptHookV.dll, dinput8.dll, ReShade64.asi,
+  шейдер, args.txt 19 байт, ReShadePreset.ini, ReShade.ini), MINECRAFT\mods\
+  (jar + fabric-api), install.ps1/install.bat, README.txt.
+
 ## Дальше
-- [x] копия примера в репозиторий (mc/, gta/, host/, video/)
-- [x] .github/workflows/build.yml
-- [x] scripts/package.ps1, scripts/fetch_fabric_api.py
-- [x] install.ps1, install.bat, README.txt, README.md, .gitignore/.gitattributes
-- [ ] коммит + push в ladnojak-ship-it/9
-- [ ] зелёный билд в Actions (ожидаем правки: первый прогон часто сыпет)
-- [ ] скачать артефакт, установить (спросив разрешения), скопировать jar'ы
-- [ ] проверка в игре: запуск обоих, скриншот (um win), MODLOG
+- [x] коммит + push в ladnojak-ship-it/9
+- [x] зелёный билд в Actions
+- [x] скачать артефакт, проверить содержимое
+- [ ] разрешение пользователя на установку в папку игры и mods
+- [ ] установка (install.bat) + запуск обоих + скриншот (um win) → MODLOG
 - [ ] field note в kb (с разрешения человека)
