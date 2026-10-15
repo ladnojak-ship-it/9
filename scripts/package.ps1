@@ -16,16 +16,17 @@ function Get-Prop($name) {
 }
 
 $ver = Get-Prop 'version'
-$jar = Join-Path $mcMods "passthrough-$ver.jar"
-if (-not (Test-Path $jar)) {
-    $candidates = Get-ChildItem (Join-Path $mcMods 'passthrough-*.jar') -ErrorAction SilentlyContinue |
-        Where-Object { $_.Name -notmatch 'sources|dev' }
-    if (-not $candidates) { throw "no passthrough jar in $mcMods" }
-    $jar = $candidates[0].FullName
+$jar = Get-ChildItem $mcMods -Recurse -Filter "passthrough-$ver.jar" -ErrorAction SilentlyContinue |
+    Select-Object -First 1
+if (-not $jar) {
+    $jar = Get-ChildItem $mcMods -Recurse -Filter 'passthrough-*.jar' -ErrorAction SilentlyContinue |
+        Where-Object { $_.Name -notmatch 'sources|dev' } | Select-Object -First 1
 }
-$fabricApi = Get-ChildItem (Join-Path $mcMods 'fabric-api.jar') -ErrorAction SilentlyContinue |
+if (-not $jar) { throw "no passthrough jar in $mcMods" }
+$fabricApi = Get-ChildItem $mcMods -Recurse -Filter 'fabric-api.jar' -ErrorAction SilentlyContinue |
     Select-Object -First 1
 if (-not $fabricApi) { throw "no fabric-api.jar in $mcMods" }
+$jar = $jar.FullName
 
 $stage = Join-Path $dist 'stage'
 Remove-Item $stage -Recurse -Force -ErrorAction SilentlyContinue
