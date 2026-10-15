@@ -57,7 +57,12 @@ def fetch_fabric_api() -> None:
 
 
 def fetch_optional() -> None:
-    stable = [v for v in versions("sodium") if "alpha" not in v["version_number"].lower()]
+    stable = [
+        v
+        for v in versions("sodium")
+        if "alpha" not in v["version_number"].lower()
+        and "beta" not in v["version_number"].lower()
+    ]
     if not stable:
         print("warning: no stable Sodium for this version; skipping the optional mod")
         return

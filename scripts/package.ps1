@@ -47,7 +47,8 @@ Copy-Item (Join-Path $gta 'third_party\ReShadeUI.fxh')  $stageShaders
 Copy-Item $jar, $fabricApi.FullName $stageMcMods
 
 # --- optional mods (installed with -WithSodium; the passthrough works without them)
-$optSrc = Join-Path $root 'optional'
+# they arrive inside the downloaded mc-mod artifact as optional/*.jar
+$optSrc = Join-Path $mcMods 'optional'
 if (Test-Path $optSrc) {
     $stageOpt = Join-Path $stage 'MINECRAFT\mods-optional'
     New-Item -ItemType Directory -Force -Path $stageOpt | Out-Null
