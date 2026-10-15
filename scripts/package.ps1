@@ -3,7 +3,7 @@
 # PowerShell 5.1 compatible; run from anywhere:  pwsh scripts\package.ps1
 $ErrorActionPreference = 'Stop'
 
-$root = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$root = Split-Path -Parent $PSScriptRoot
 $gta = Join-Path $root 'gta'
 $mc = Join-Path $root 'mc'
 $dist = Join-Path $root 'dist'
