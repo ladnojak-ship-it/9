@@ -39,7 +39,7 @@
    Он сам найдёт GTA V (Steam) и Minecraft; пути можно задать вручную:
 
    ```bat
-   install.bat -GtaDir "D:\SteamLibrary\steamapps\common\Grand Theft Auto V" -McDir "C:\Users\Perimetr\AppData\Roaming\FreesmLauncher\instances\67\minecraft"
+   install.bat -GtaDir "<папка с GTA5.exe>" -McDir "<папка minecraft вашего профиля>"
    ```
 
    Все заменённые файлы сохраняются в `GTA\_passthrough_backup_<дата>\`.

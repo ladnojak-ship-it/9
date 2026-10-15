@@ -19,7 +19,7 @@
        - всё, что заменяет, сохранит в GTA\_passthrough_backup_<дата>\
 
      Если что-то не нашлось автоматически:
-       install.bat -GtaDir "D:\SteamLibrary\steamapps\common\Grand Theft Auto V" -McDir "C:\Users\Perimetr\AppData\Roaming\FreesmLauncher\instances\67\minecraft"
+       install.bat -GtaDir "<папка с GTA5.exe>" -McDir "<папка minecraft профиля>"
 
 ЗАПУСК
   1. Запустите Minecraft в профиле 67 (Fabric), окно оставьте открытым

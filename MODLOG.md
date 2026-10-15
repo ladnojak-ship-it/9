@@ -72,10 +72,26 @@ MC (профиль 67) → GTA → Story Mode вручную → F7. Никог�
   шейдер, args.txt 19 байт, ReShadePreset.ini, ReShade.ini), MINECRAFT\mods\
   (jar + fabric-api), install.ps1/install.bat, README.txt.
 
+## Проверка в игре (сделано 2026-10-15)
+- Установка: `install.ps1` в папку GTA (MCPassthrough.asi, ReShade64.asi,
+  MCPassthrough.fx; dinput8.dll/ScriptHookV.dll/args.txt уже были побайтово те
+  же — не тронуты; ReShade.ini пользователя сохранён) + jar'ы в mods instance 67.
+- Minecraft: freesmlauncher.exe --launch 67; лог — mod loaded, world
+  `passthrough` создан, HostLink listening 127.0.0.1:25599 (netstat подтвердил),
+  хотбар выставлен командой (журнал latest.log).
+- GTA: `um win launch --steam 271590`, ScriptHookV v3889.0, asiloader.load:
+  MCPassthrough.asi + ReShade64.asi, ReShade.log: `Registered add-on
+  "MCPassthrough"`, `connected to Minecraft's frame export`.
+- Скриншоты (`um win shot --exe GTA5.exe`): на земле/на машине — чисто:
+  Стив в Лос-Сантосе, хотбар внизу, окклюзия по глубине верная (Стив сидит на
+  машине, закрывая её). В воздухе при быстром падении с большой высоты —
+  смиринг блоков от репроекции (известный предел; poselag-тюнинг не проверен,
+  кадр 21:12:00 пользователя).
+- Игры закрыты пользователем.
+
 ## Дальше
-- [x] коммит + push в ladnojak-ship-it/9
-- [x] зелёный билд в Actions
-- [x] скачать артефакт, проверить содержимое
-- [ ] разрешение пользователя на установку в папку игры и mods
-- [ ] установка (install.bat) + запуск обоих + скриншот (um win) → MODLOG
+- [x] разрешение пользователя на установку в папку игры и mods
+- [x] установка (install.ps1) + запуск обоих + скриншоты (um win)
+- [ ] (опц.) проверить poselag=1 в воздухе, поставить боки/TNT, мобы vs полиция
+- [ ] (опц.) showcase-видео (um win record + um video)
 - [ ] field note в kb (с разрешения человека)
